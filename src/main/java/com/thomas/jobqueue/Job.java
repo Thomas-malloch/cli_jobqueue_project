@@ -1,43 +1,78 @@
 package com.thomas.jobqueue;
+import java.io.Serializable;
 
-public abstract class Job {
+
+public abstract class Job implements Serializable{
 
     public enum JobStatus {
         PENDING,
         RUNNING,
-        COMPLETED
+        COMPLETED,
+        FAILED,
+        CANCELLED
     }
 
     private static int nextId = 1;
 
-    private int jobId;
+    private final int jobId;
     private JobStatus status;
+    private String result;
+    private String error;
 
     public Job() {
         this.jobId = nextId++;
         this.status = JobStatus.PENDING;
     }
 
+    public final void run() {
+        if (status == JobStatus.CANCELLED) return;
+
+        status = JobStatus.RUNNING;
+
+        try {
+            execute();
+            status = JobStatus.COMPLETED;
+        } catch (Exception e) {
+            status = JobStatus.FAILED;
+            error = e.getMessage();
+        }
+    }
+
+    protected abstract void execute() throws Exception;
+
     public int getJobId() {
         return jobId;
     }
 
-    public JobStatus getJobStatus() {
+    public JobStatus getStatus() {
         return status;
     }
 
-    public void changeStatus(JobStatus j) {
-        this.status = j;
-        System.out.println("Status: " + this.status);
-        if (j == JobStatus.COMPLETED) {
-            System.out.println("JOB HAS BEEN COMPLETED");
+    public void cancel() {
+        if (status == JobStatus.PENDING) {
+            status = JobStatus.CANCELLED;
         }
     }
 
-    public abstract void execute();
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public String getError() {
+        return error;
+    }
 
     @Override
     public String toString() {
-        return "Job{id=" + jobId + ", status=" + status + "}";
+        return "Job{id=" + jobId +
+                ", status=" + status + "}";
     }
 }

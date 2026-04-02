@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../../../Jobqueue-cli"
+		},
+		{
+			"name": "cli_jobqueue_project",
+			"path": "../../../../../.."
+		}
+	],
+	"settings": {}
+}
