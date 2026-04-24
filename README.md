@@ -14,8 +14,6 @@ The system demonstrates core backend concepts including:
 * basic persistence
 * integration of real algorithms (Huffman encoding)
 
----
-
 ## Features
 
 ### Core System
@@ -44,29 +42,19 @@ The system demonstrates core backend concepts including:
   * Reports estimated compression statistics
 
 Example:
-
-```
 submit compress huffman file.txt compressed.txt
-```
-
----
 
 ## Example Usage
 
-```
 > submit print hello
 > submit sleep 3
 > submit write notes.txt hello world
 > submit read notes.txt
 > submit compress huffman notes.txt notes.huff
-
 > list
 > history
 > status 3
 > cancel 2
-```
-
----
 
 ## How It Works
 
@@ -82,26 +70,20 @@ The system is divided into two layers:
 * `Main` — CLI interface
 
 #### Job Implementations
-
 * `PrintJob`
 * `SleepJob`
 * `ReadFileJob`
 * `WriteFileJob`
 * `HuffmanCompressJob`
 
----
-
 ### Execution Model
 
 * Jobs are submitted via CLI
 * Added to a queue (`BlockingQueue`)
 * A background worker thread continuously:
-
   * takes jobs from the queue
   * executes them
   * updates their status
-
----
 
 ## Huffman Compression
 
@@ -113,38 +95,22 @@ Current implementation:
 * Builds Huffman tree from input
 * Encodes text into a bitstring
 * Writes encoded output to file
-
 Note:
-
 * Output is stored as a string of `0`s and `1`s
 * Compression size is estimated (not bit-packed to disk yet)
 * Decoding is not fully implemented as a standalone file format
-
 Example result:
-
-```
 Compressed file.txt → compressed.txt | original bytes: 120 | estimated compressed bytes: 64 | ratio: 0.53
-```
-
----
 
 ## Persistence
 
 Jobs are saved to disk using serialization:
-
-```
 jobs.dat
-```
-
 * Located in project root
 * Automatically loaded on startup
 * Updated when jobs are submitted or completed
 
----
-
 ## Project Structure
-
-```
 cli_jobqueue_project/
 ├── pom.xml
 ├── jobs.dat
@@ -162,30 +128,17 @@ cli_jobqueue_project/
 │           ├── WriteFileJob.java
 │           └── HuffmanCompressJob.java
 └── target/
-```
-
----
 
 ## How to Run
 
 ### Compile
-
-```
 mvn clean compile
-```
 
 ### Run
-
-```
 mvn exec:java -Dexec.mainClass="com.thomas.jobqueue.Main"
-```
-
----
 
 ## Future Improvements
-
 Planned extensions:
-
 * Huffman decompression with stored metadata
 * Lempel-Ziv compression jobs
 * TCP server for multi-client support
@@ -193,10 +146,7 @@ Planned extensions:
 * Improved binary compression (bit-packing)
 * Job result retrieval (`result <id>`)
 
----
-
 ## Key Concepts Demonstrated
-
 * Multithreading (worker thread + CLI thread)
 * Producer-consumer pattern (job queue)
 * Object-oriented design (abstract classes, polymorphism)
@@ -204,15 +154,11 @@ Planned extensions:
 * Command parsing
 * Integration of algorithms into backend systems
 
----
-
 ## Notes
 
 * `.class` files are excluded from source and generated in `target/`
 * `jobs.dat` stores runtime data and should not be committed
 * Use Maven for building and running
-
----
 
 ## Author
 
